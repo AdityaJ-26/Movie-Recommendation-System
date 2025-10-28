@@ -1,0 +1,4 @@
+*.exe
+misc/
+*.dat
+!data/moviesData.dat
