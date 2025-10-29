@@ -9,7 +9,7 @@ Movies *initialiseMovie() {
 }
 
 void enter(Movies *movie){
-    char str[500];
+    char str[200];
 
     printf("NAME: ");
     scanf("%99[^\n]", str);
@@ -35,7 +35,8 @@ void enter(Movies *movie){
     getchar();
 }
 
-void storeMovie(Movies *movie, FILE *file) {
+void storeMovie(Movies *movie) {
+    FILE *file = fopen(FILENAME, "ab");
     if (!file) {
         printf("ERROR IN FILE");
         return;
@@ -44,20 +45,7 @@ void storeMovie(Movies *movie, FILE *file) {
         printf("Added\n\n");
     }
     else printf("Not Added\n\n");
-}
-
-Movies *retrieve(FILE *file) {
-    if (!file) {
-        printf("ERROR IN FILE");
-        return NULL;
-    }
-    Movies *movie = initialiseMovie();
-    if (fread(movie, sizeof(Movies), 1, file));
-    else {
-        printf("ERROR RETRIEVING\n");
-        return NULL;
-    }
-    return movie;
+    fclose(file);
 }
 
 void printMovie(Movies *movie) {
@@ -70,16 +58,15 @@ void printMovie(Movies *movie) {
     return;
 }
 
-int main() {
-    Movies *movie = initialiseMovie();
-    FILE *file = fopen(FILENAME, "ab");
-    enter(movie);
-    storeMovie(movie, file);
-    fclose(file);
-    system("cls");
-    file = fopen(FILENAME, "rb");
-    while (fread(movie, sizeof(Movies), 1, file)) {
-        printMovie(movie);
-    }
-    return 0;
-}
+// int main() {
+//     Movies *movie = initialiseMovie();
+//     enter(movie);
+//     storeMovie(movie);
+//     fclose(file);
+//     system("cls");
+//     file = fopen(FILENAME, "rb");
+//     while (fread(movie, sizeof(Movies), 1, file)) {
+//         printMovie(movie);
+//     }
+//     return 0;
+// }

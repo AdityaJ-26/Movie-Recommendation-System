@@ -32,8 +32,8 @@ void addWatched(User *currUser) {
             break;
         }
 
-        strcat(name, ",");
         strcat(currUser->movieList, name);
+        strcat(name, ",");
         printf("Movie Added to Your List \n");
         printf("Enter Movie Name or 'exit' to Exit: ");
     }
@@ -76,7 +76,6 @@ User *getUserData() {
 
     User *user = (User *)malloc(sizeof(User));
     fread(user, sizeof(User), 1, file);
-    fclose(file);
 
     char pass[9];
     getchar();

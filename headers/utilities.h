@@ -21,9 +21,9 @@ void addTokens(HashMap *, char *);
 Pref *getPreferences(User *);
 void makePreferences(char *, HashMap *);
 void getUserPreferences(User *, Pref *);
-int insertScore(Score *, char *, float);
 float getScore(char *, char *);
 void scoreMovies(User *, Score *);
+int insertScore(Score *, char *, float);
 void printScoreList(Score *);
 
 #endif //UTILITIES_H

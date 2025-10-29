@@ -152,10 +152,10 @@ void printScoreList(Score *scoreList) {
 //     Pref *preference = getPreferences(user);
 //     Score *scoreList = malloc(sizeof(Score)*MAX_SCORES);
 //     strcpy(scoreList[0].name, "END");
-//     scoreMovies(user, scoreList);
-//     // getUserPreferences(user, preference);
-//     // storeUser(user);
+//     getUserPreferences(user, preference);
+//     storeUser(user);
 //     printUser(user);
+//     scoreMovies(user, scoreList);
 //     printScoreList(scoreList);
 
     
