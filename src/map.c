@@ -84,7 +84,7 @@ int getKeyValue(HashMap *map, char *k) {
             return map->list[i]->value;
         }
     }
-    return 0;
+    return -1;
 }
 
 // int main() {

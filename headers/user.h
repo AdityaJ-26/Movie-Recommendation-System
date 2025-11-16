@@ -10,10 +10,10 @@ typedef struct User {
 }User;
 
 User *newUser();
-// int login();
 void storeUser(User *);
 void addWatched(User *);
 User *getUserData();
+void printUserMovies(User *);
 void printUser(User *);
 
 #endif //USER_H

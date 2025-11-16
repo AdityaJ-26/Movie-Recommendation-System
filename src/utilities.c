@@ -51,9 +51,9 @@ Pref *getPreferences(User *currUser) {
 
 void makePreferences(char *pref, HashMap *map) {
     int len, maxValue, median;
-    median = medianValue(map);
     len = map->length;
     if (len == 0) return;
+    median = medianValue(map);
     maxValue = map->list[len-1]->value;
     for (int i=len-1; i>=0; i--) {
         if (maxValue - map->list[i]->value < median) {
@@ -70,7 +70,7 @@ void getUserPreferences(User *currUser, Pref *preference) {
     makePreferences(currUser->preferences, preference->directors);
 }
 
-float getScore(char *preference, char *attributes) {
+int getScore(char *preference, char *attributes, int rating) {
     int nPref = 1, nAtt = 1, intersection = 0, Union, i = 0; 
     while (preference[i] != '\0') {
         if (preference[i] == ',') {
@@ -94,70 +94,77 @@ float getScore(char *preference, char *attributes) {
         strcpy(tempAtt, attributes);
         tokAtt = strtok_r(tempAtt, ",", &saveAtt);
         while (tokAtt) {
-            if (!strcmp(tokPref, tokAtt)) intersection++;
+            if (!strcmpi(tokPref, tokAtt)) intersection++;
             tokAtt = strtok_r(NULL, ",", &saveAtt);
         }
         tokPref = strtok_r(NULL, ",", &savePref); 
     }
     
     Union = nPref + nAtt - intersection;
-    return ((float)intersection/Union);
+    return ((float)intersection/Union*100) + rating*5;
 }
 
-int insertScore(Score *scoreList, char *name, float score) {
-    int i=0;
-    while (strcmp(scoreList[i].name, "END")) {
-        i++;
-    }
-    if (i > MAX_SCORES-2) return 0;
-    strcpy(scoreList[i].name, name);
-    scoreList[i].score = score;
-    strcpy(scoreList[i+1].name, "END");
-    return 1;
-}
-
-void scoreMovies(User *currUser, Score *scoreList) {
+void scoreMovies(User *currUser, Heap *scoreList) {
     FILE *file = fopen(FILENAME, "rb");
     if (!file) {
         printf("Error Opening File\n");
         return;
     }
-    
     char attributes[500];
     char tempPref[500];
-    
     Movies *movie = malloc(sizeof(Movies));
     while (fread(movie, sizeof(Movies), 1, file)) {
+        char userMovies[500];
+        strcpy(userMovies, currUser->movieList);
+        char *savePtr, *tok;
+        tok = strtok_r(userMovies, ",", &savePtr);
+        bool flag = true;
+        while (tok) {
+            if (!strcmpi(tok, movie->name)) {
+                flag = false;
+                break;
+            }
+            tok = strtok_r(NULL, ",", &savePtr);
+        }
+        if (!flag) continue;
         strcpy(tempPref, currUser->preferences);
-        strcat(tempPref, "\0");
         attributes[0] = '\0';
         strcat(attributes, movie->genre);
         strcat(attributes, ",");
         strcat(attributes, movie->actors);
         strcat(attributes, ",");
         strcat(attributes, movie->directors);
-        strcat(attributes, "\0");
-        if (!insertScore(scoreList, movie->name, getScore(tempPref, attributes))) break;
+        int score = getScore(tempPref, attributes, movie->rating);
+        insertHeap(scoreList, movie->name, score);
     }
 }
 
-void printScoreList(Score *scoreList) {
-    for (int i=0; strcmp(scoreList[i].name, "END"); i++) {
-        printf("%s - %f\n", scoreList[i].name, scoreList[i].score);
-    }
+void delete(Pref *pref) {
+    free(pref->actors);
+    free(pref->directors);
+    free(pref->genres);
+    free(pref);
+    pref == NULL;
+}
+
+void topK(Heap *scoreList, int k) {
+    int i = scoreList->size;
+    while (scoreList->size) 
+        deleteHeap(scoreList);
+    printf("Top Recommended Movies for User \n");
+    for (int j=0; j<i; j++) 
+        printf("%s\n", scoreList->list[j].name);
 }
 
 // int main() {
 //     User *user = getUserData();
 //     Pref *preference = getPreferences(user);
-//     Score *scoreList = malloc(sizeof(Score)*MAX_SCORES);
-//     strcpy(scoreList[0].name, "END");
+//     Heap *scoreList = initialiseHeap();
 //     getUserPreferences(user, preference);
-//     storeUser(user);
+//     // storeUser(user);
 //     printUser(user);
 //     scoreMovies(user, scoreList);
-//     printScoreList(scoreList);
-
+//     topK(scoreList, 2);
     
 //     free(user);
 //     free(preference->genres);

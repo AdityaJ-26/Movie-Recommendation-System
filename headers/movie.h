@@ -1,7 +1,7 @@
 #ifndef MOVIE_H
 #define MOVIE_H
 
-#define FILENAME "..\\data\\moviesData.dat"
+#define FILENAME "data\\moviesData.dat"
 
 typedef struct Movies {
     char name[100];
@@ -11,8 +11,7 @@ typedef struct Movies {
 
 Movies *initialiseMovie();
 void enter(Movies *);
-void storeMovie(Movies *, FILE *);
-Movies *retrieve(FILE *);
+void storeMovie(Movies *);
 void printMovie(Movies *);
 
 #endif //MOVIE_H
