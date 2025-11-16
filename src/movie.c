@@ -62,7 +62,6 @@ void printMovie(Movies *movie) {
 //     Movies *movie = initialiseMovie();
 //     enter(movie);
 //     storeMovie(movie);
-//     fclose(file);
 //     system("cls");
 //     file = fopen(FILENAME, "rb");
 //     while (fread(movie, sizeof(Movies), 1, file)) {
