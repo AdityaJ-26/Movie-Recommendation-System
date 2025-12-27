@@ -24,6 +24,7 @@ A simple user preference based movie recommendation system created entirely in C
 #### *User*
 - Users are assigned randomly generated IDs, and have to setup password for login authentication.
 - User can enter watched movie's names to their watch list.
+- User data is stored in files with name as id.dat to store and access user files efficiently.
 
 #### *Recommendation Generation*
 - Uses user's watch list and movies file to get user's preferred attributes.
